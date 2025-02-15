@@ -1,10 +1,10 @@
 import React from 'react';
-import MealPlans from './MealPlans';
+import DexcomAPI from './DexcomAPI';
 
 function App() {
   return (
     <div>
-      <MealPlans />
+      <DexcomAPI />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { GoogleGenerativeAI, SchemaType } from "@google/generative-ai";
 import {
@@ -7,7 +6,6 @@ import {
   Container,
   TextField,
   Typography,
-  Grid,
   Paper,
 } from "@mui/material";
 
@@ -71,14 +69,11 @@ const MealRecommendationComponent = () => {
         .split(",")
         .map((value) => Number(value.trim()))
         .filter((value) => !isNaN(value)); // Filter out invalid numbers
-
       if (parsedexerciseData.length === 0) {
         throw new Error("Invalid glucose data. Please enter numeric values.");
       }
-
       // Convert user meal plan object to JSON string
       const userMealPlanString = JSON.stringify(userMealPlan);
-
       // Construct the prompt for the AI model
       const prompt = `
         The user makes the following meal plan for the day: ${userMealPlanString}.
@@ -86,11 +81,9 @@ const MealRecommendationComponent = () => {
         and dietary preferences: ${frequencyData}, 
         provide some recommendations and feedback on their meal plan.
       `;
-
       // Call the AI model to generate content
       const result = await model.generateContent(prompt);
       const aiResponseText = result.response.text(); // Get the raw AI response
-
       // Store the raw response text in state
       setResponseText(aiResponseText);
     } catch (error) {
@@ -108,7 +101,6 @@ const MealRecommendationComponent = () => {
         <Typography variant="h4" align="center" gutterBottom>
           Meal Recommendation Generator
         </Typography>
-
         {/* Form */}
         <form onSubmit={generateMealRecommendations}>
           {/* Input for glucose data */}
@@ -121,7 +113,6 @@ const MealRecommendationComponent = () => {
             margin="normal"
             required
           />
-
           {/* Input for dietary preferences */}
           <TextField
             fullWidth
@@ -132,7 +123,6 @@ const MealRecommendationComponent = () => {
             margin="normal"
             required
           />
-
           {/* Inputs for user meal plan */}
           <TextField
             fullWidth
@@ -145,7 +135,6 @@ const MealRecommendationComponent = () => {
             margin="normal"
             required
           />
-
           <TextField
             fullWidth
             label="Lunch"
@@ -157,7 +146,6 @@ const MealRecommendationComponent = () => {
             margin="normal"
             required
           />
-
           <TextField
             fullWidth
             label="Dinner"
@@ -169,7 +157,6 @@ const MealRecommendationComponent = () => {
             margin="normal"
             required
           />
-
           {/* Submit button */}
           <Box sx={{ textAlign: "center", mt: 2 }}>
             <Button
@@ -182,36 +169,43 @@ const MealRecommendationComponent = () => {
             </Button>
           </Box>
         </form>
-
         {/* Display AI response */}
         {parsedResponse.length > 0 && (
           <Box sx={{ mt: 4 }}>
             <Typography variant="h6" align="center" gutterBottom>
               AI Recommendations
             </Typography>
-            <Grid container spacing={3}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: {
+                  xs: "1fr", // Single column for small screens
+                  sm: "repeat(2, 1fr)", // Two columns for medium screens
+                  md: "repeat(3, 1fr)", // Three columns for large screens
+                },
+                gap: 3, // Spacing between grid items
+              }}
+            >
               {parsedResponse.map((meal, index) => (
-                <Grid item xs={12} sm={6} md={4} key={index}>
-                  <Paper elevation={3} sx={{ p: 3 }}>
-                    <Typography variant="h5" gutterBottom>
-                      {meal.meal}
-                    </Typography>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Feedback:
-                    </Typography>
-                    <Typography variant="body1" paragraph>
-                      {meal.feedback || "No feedback available."}
-                    </Typography>
-                    <Typography variant="subtitle1" gutterBottom>
-                      Alternatives:
-                    </Typography>
-                    <Typography variant="body1" paragraph>
-                      {meal.alternatives || "No alternatives suggested."}
-                    </Typography>
-                  </Paper>
-                </Grid>
+                <Paper key={index} elevation={3} sx={{ p: 3 }}>
+                  <Typography variant="h5" gutterBottom>
+                    {meal.meal}
+                  </Typography>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Feedback:
+                  </Typography>
+                  <Typography variant="body1" paragraph>
+                    {meal.feedback || "No feedback available."}
+                  </Typography>
+                  <Typography variant="subtitle1" gutterBottom>
+                    Alternatives:
+                  </Typography>
+                  <Typography variant="body1" paragraph>
+                    {meal.alternatives || "No alternatives suggested."}
+                  </Typography>
+                </Paper>
               ))}
-            </Grid>
+            </Box>
           </Box>
         )}
       </Box>

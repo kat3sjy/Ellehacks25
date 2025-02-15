@@ -53,8 +53,8 @@ const model = genAI.getGenerativeModel({
 
 const MealRecommendationComponent = () => {
   // State variables to store user inputs
-  const [glucoseData, setGlucoseData] = useState("");
-  const [dietaryPreferences, setDietaryPreferences] = useState("");
+  const [exerciseData, setExerciseData] = useState("");
+  const [frequencyData, setFrequencyData] = useState("");
   const [userMealPlan, setUserMealPlan] = useState({
     Breakfast: "",
     Lunch: "",
@@ -67,12 +67,12 @@ const MealRecommendationComponent = () => {
     e.preventDefault(); // Prevent default form behavior
     try {
       // Parse glucose data from string to array
-      const parsedGlucoseData = glucoseData
+      const parsedexerciseData = exerciseData
         .split(",")
         .map((value) => Number(value.trim()))
         .filter((value) => !isNaN(value)); // Filter out invalid numbers
 
-      if (parsedGlucoseData.length === 0) {
+      if (parsedexerciseData.length === 0) {
         throw new Error("Invalid glucose data. Please enter numeric values.");
       }
 
@@ -82,8 +82,8 @@ const MealRecommendationComponent = () => {
       // Construct the prompt for the AI model
       const prompt = `
         The user makes the following meal plan for the day: ${userMealPlanString}.
-        Based on the following glucose levels: ${parsedGlucoseData.join(", ")} 
-        and dietary preferences: ${dietaryPreferences}, 
+        Based on the following glucose levels: ${parsedexerciseData.join(", ")} 
+        and dietary preferences: ${frequencyData}, 
         provide some recommendations and feedback on their meal plan.
       `;
 
@@ -115,8 +115,8 @@ const MealRecommendationComponent = () => {
           <TextField
             fullWidth
             label="Glucose Data (comma-separated values)"
-            value={glucoseData}
-            onChange={(e) => setGlucoseData(e.target.value)}
+            value={exerciseData}
+            onChange={(e) => setExerciseData(e.target.value)}
             placeholder="e.g., 120, 140, 130, 110"
             margin="normal"
             required
@@ -126,8 +126,8 @@ const MealRecommendationComponent = () => {
           <TextField
             fullWidth
             label="Dietary Preferences"
-            value={dietaryPreferences}
-            onChange={(e) => setDietaryPreferences(e.target.value)}
+            value={frequencyData}
+            onChange={(e) => setFrequencyData(e.target.value)}
             placeholder="e.g., low-carb, vegetarian"
             margin="normal"
             required

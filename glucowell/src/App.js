@@ -1,10 +1,10 @@
-import React from 'react';
-import MealPlans from './MealPlans';
+import React from "react";
+import TabsComponent from "./Tabs";
 
 function App() {
   return (
     <div>
-      <MealPlans />
+      <TabsComponent />
     </div>
   );
 }

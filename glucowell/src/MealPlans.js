@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+
 // Initialize the Google Generative AI client
-const genAI = new GoogleGenerativeAI("AIzaSyCwI_FumTTSyWt7hbvbtlzyzU1UeFx52rQ");
+const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 function MealPlans() {

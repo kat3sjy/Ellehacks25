@@ -1,4 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || 'http://localhost:4000/analyze-glucose';
 const GLUCOSE_DATA_ENDPOINT = process.env.REACT_APP_GLUCOSE_DATA_ENDPOINT || 'https://fakeapi.platzi.com/en/rest/pretend-data';
@@ -48,11 +69,38 @@ export default function GlucoseMonitor() {
     }
   }
 
+  const chartData = {
+    labels: bloodSugarData.map(item => new Date(item.timestamp).toLocaleTimeString()),
+    datasets: [
+      {
+        label: 'Blood Sugar Level',
+        data: bloodSugarData.map(item => item.value),
+        fill: false,
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgba(255, 99, 132, 0.2)',
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Blood Sugar Levels Over Time',
+      },
+    },
+  };
+
   return (
     <div>
       <h2>📊 AI Blood Sugar Analysis</h2>
       <button onClick={analyzeData}>Analyze Trends</button>
       <p>{trend}</p>
+      <Line data={chartData} options={chartOptions} />
     </div>
   );
 }

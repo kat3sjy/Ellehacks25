@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Buffer } from 'node:buffer';
+const { mongoDB, DexcomData } = require('./mongo');
 
 const CLIENT_ID = "ZYJi0m5nN1AhPX5BIYnDGNLgLn0rqO3N";
 const REDIRECT_URI = "http://127.0.0.1:4040";
 const DEXCOM_API_URL = "https://api.dexcom.com/v2"; // or sandbox
 const CLIENT_SECRET = "F4vKwRHPsQFraF2B";
+const MONGODB_URI = "mongodb+srv://lievelyn746:gp3puFBu6M0JcMF7@clusterellehacks.ycvsi.mongodb.net/";
 
 const generateCodeVerifier = (length) => {
   let text = "";
@@ -43,12 +45,9 @@ function DexcomAPI() {
     if (code) {
       // Exchange the authorization code for an access token
       exchangeCodeForToken(code);
-    } else if (!accessToken) {
+    } else {
       // If we don't have an access token, redirect to Dexcom for authorization
       redirectToDexcom();
-    } else {
-      // If we have an access token, fetch data from the Dexcom API
-      fetchData();
     }
   }, [accessToken]);
 
@@ -71,6 +70,7 @@ function DexcomAPI() {
       const data = await response.json();
       setAccessToken(data.access_token);
       localStorage.setItem('dexcom_access_token', data.access_token); // Store access token
+      console.log('Access token stored in local storage:', data.access_token);
     } catch (error) {
       console.error("Error exchanging code for token:", error);
     }
@@ -87,8 +87,24 @@ function DexcomAPI() {
           },
         });
 
-        const data = await response.json();
-        setData(data);
+        const responseData = await response.json();
+        setData(responseData);
+
+        // Connect to MongoDB
+        await mongoDB(MONGODB_URI);
+
+        // Save the data to MongoDB
+        if (responseData.egvs && Array.isArray(responseData.egvs)) {
+          for (const egv of responseData.egvs) {
+            const dexcomData = new DexcomData({
+              value: egv.value,
+              trend: egv.trend,
+              time: new Date(egv.systemTime), // Use systemTime as time
+            });
+            await dexcomData.save();
+            console.log('Dexcom data saved to MongoDB');
+          }
+        }
       } else {
         redirectToDexcom();
       }

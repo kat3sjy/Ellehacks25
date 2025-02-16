@@ -17,10 +17,10 @@ const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_API_KEY);
 
 const schema = {
   description:
-    "An array providing feedback and alternative meal suggestions on the user's three meals of the day: breakfast, lunch, and dinner. Each meal should have its own object with separate feedback and alternatives.",
+    "An array providing feedback and alternative meal suggestions on the user's three meals of the day: breakfast, lunch, and dinner. Each meal should have its own object with separate feedback and alternatives. The last object of the array should describe a potential grocery shopping list that suits the feedback and alternatives that were provided.",
   type: SchemaType.ARRAY,
-  minItems: 3,
-  maxItems: 3,
+  minItems: 4,
+  maxItems: 4,
   items: {
     type: SchemaType.OBJECT,
     properties: {
@@ -39,8 +39,12 @@ const schema = {
         description:
           "Providing alternative healthier meal options for the user. (either breakfast, lunch, or dinner. NOT for all three.) When providing alternatives, please be specific to the user's choices. This means, do not provide an alternative option that is completely unrelated to the user's original choice. Instead, modify the user's choice with some reasonable improvements.",
       },
+      groceryList: {
+        type: SchemaType.STRING,
+        description: "A potential grocery list of food items that would be appropriate for the feedback and alternatives that was previously provided."
+      }
     },
-    required: ["meal", "feedback", "alternatives"],
+    required: ["meal", "feedback", "alternatives", "grocery list"],
   },
 };
 

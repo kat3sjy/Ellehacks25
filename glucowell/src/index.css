@@ -9,3 +9,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Custom styles for the button */
+button.custom-button {
+  /* Positioning */
+  position: relative; /* or 'absolute', 'fixed' depending on your layout */
+  top: 0%; /* Adjust vertical position */
+  left: 90%; /* Center horizontally */
+  transform: translateX(-50%) translateY(50%); /* Ensure perfect center alignment */
+
+  /* Size */
+  width: 200px; /* Set button width */
+  height: 50px; /* Set button height */
+  padding: 10px 20px; /* Add internal spacing */
+
+  /* Color */
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  border: none; /* Remove default border */
+  border-radius: 8px; /* Rounded corners */
+
+  /* Font */
+  font-size: 16px; /* Increase font size */
+  font-weight: bold; /* Bold text */
+
+  /* Hover effect */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.custom-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}

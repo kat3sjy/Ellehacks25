@@ -15,12 +15,7 @@ const DexcomAPI = () => {
 
     if (code) {
       exchangeCodeForToken(code);
-    } else {
-      const storedAccessToken = localStorage.getItem("dexcom_access_token");
-      if (storedAccessToken) {
-        setAccessToken(storedAccessToken);
-      }
-    }
+    } 
   }, []);
 
   const redirectToDexcom = () => {
@@ -46,7 +41,6 @@ const DexcomAPI = () => {
 
       const data = await response.json();
       setAccessToken(data.access_token);
-      localStorage.setItem("dexcom_access_token", data.access_token);
     } catch (error) {
       console.error("Error exchanging code for token:", error);
     }
@@ -55,7 +49,7 @@ const DexcomAPI = () => {
   return (
     <div>
       {!accessToken ? (
-        <button onClick={redirectToDexcom}>Login with Dexcom</button>
+        <button className="custom-button" onClick={redirectToDexcom}>Login with Dexcom</button>
       ) : (
         <p>Access Token: {accessToken}</p>
       )}
@@ -64,4 +58,3 @@ const DexcomAPI = () => {
 };
 
 export default DexcomAPI;
-

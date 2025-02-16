@@ -64,3 +64,4 @@ const DexcomAPI = () => {
 };
 
 export default DexcomAPI;
+

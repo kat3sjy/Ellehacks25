@@ -8,19 +8,18 @@ import React from "react";
 //     Typography,
 //     Paper,
 // } from "@mui/material";
-import { BarChart } from '@mui/x-charts';
 import DexcomAPI from './DexcomAPI';
+import LineChartComponent from "./LineChartComponent";
+console.log("Imported LineChartComponent:", LineChartComponent);
+console.log("Keys of Imported Object:", Object.keys(LineChartComponent));
+console.log("Type of Imported Object:", typeof LineChartComponent);
+
 
 // insert data later
 const HomePageComponent = () => {
     return (
     <div>
-        <BarChart
-            xAxis={[{ scaleType: 'band', data: ['group A', 'group B', 'group C'] }]}
-            series={[{ data: [4, 3, 5] }, { data: [1, 6, 3] }, { data: [2, 5, 6] }]}
-            width={500}
-            height={300}
-        />
+        <LineChartComponent/>
         <div>
             <DexcomAPI />
         </div>
@@ -30,3 +29,17 @@ const HomePageComponent = () => {
 };
 
 export default HomePageComponent;
+
+// import React from "react";
+// import MinimalComponent from "./MinimalComponent"; // Adjust the path if needed
+
+// const HomePage = () => {
+//   return (
+//     <div>
+//       <h2>Testing Minimal Component</h2>
+//       <MinimalComponent />
+//     </div>
+//   );
+// };
+
+// export default HomePage;

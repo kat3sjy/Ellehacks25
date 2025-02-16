@@ -37,7 +37,7 @@ const schema = {
       alternatives: {
         type: SchemaType.STRING,
         description:
-          "Providing alternative healthier meal options for the user. (either breakfast, lunch, or dinner. NOT for all three.)",
+          "Providing alternative healthier meal options for the user. (either breakfast, lunch, or dinner. NOT for all three.) When providing alternatives, please be specific to the user's choices. This means, do not provide an alternative option that is completely unrelated to the user's original choice. Instead, modify the user's choice with some reasonable improvements.",
       },
     },
     required: ["meal", "feedback", "alternatives"],
@@ -54,24 +54,23 @@ const model = genAI.getGenerativeModel({
 
 const MealRecommendationComponent = () => {
   // State variables to store user inputs
-  const [exerciseData, setExerciseData] = useState("");
   const [frequencyData, setFrequencyData] = useState("");
   const [userMealPlan, setUserMealPlan] = useState({
     Breakfast: "",
     Lunch: "",
     Dinner: "",
   });
-  const { targets } = useContext(TargetContext);
+  const { glucoseData } = useContext(TargetContext);
   const [responseText, setResponseText] = useState("");
 
-  const glucoseData = targets.map(value => Number(value.trim())).filter(value => !isNaN(value));
+  const glucoseValues = glucoseData.map(row => row.average).filter(value => !isNaN(value));
 
 
   // Function to handle form submission
   const generateMealRecommendations = async (e) => {
     e.preventDefault(); // Prevent default form behavior
     try {
-      if (glucoseData.length === 0) {
+      if (glucoseValues.length === 0) {
         throw new Error("No valid glucose data available. Please upload a CSV file.");
       }
       // Convert user meal plan object to JSON string
@@ -79,7 +78,7 @@ const MealRecommendationComponent = () => {
       // Construct the prompt for the AI model
       const prompt = `
         The user makes the following meal plan for the day: ${userMealPlanString}.
-        Based on the following glucose levels: ${glucoseData.join(", ")} 
+        Based on the following glucose levels: ${glucoseValues.join(", ")} 
         and dietary preferences: ${frequencyData}, 
         provide some recommendations and feedback on their meal plan.
       `;
